@@ -5,16 +5,34 @@
  */
 package sistemacontrolvuelos;
 
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.json.*;
 
 /**
  *
  * @author ayau1_000
  */
 public class ControlVuelos extends javax.swing.JFrame {
-
+    
+    //MediaType para utilizar en el metod POST
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    OkHttpClient client = new OkHttpClient();
+    //Metodo POST
+    String post(String url, String json) throws IOException {
+      RequestBody body = RequestBody.create(JSON, json);
+      Request request = new Request.Builder()
+          .url(url)
+          .post(body)
+          .build();
+      Response response = client.newCall(request).execute();
+      return response.body().string();
+    }
     /**
      * Creates new form ControlVuelos
      */
@@ -176,13 +194,11 @@ public class ControlVuelos extends javax.swing.JFrame {
     }//GEN-LAST:event_jtxt_nombreActionPerformed
 
     private void jbtn_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_enviarActionPerformed
-        // TODO add your handling code here:
-        JavaHttpUrlConnectionReader a = new JavaHttpUrlConnectionReader();
         try {
-            String res = a.doHttpUrlConnectionAction("http://127.0.0.1:5000/nuevovuelo/"+jtxt_id.getText()+"/"+jtxt_nombre.getText()+"/"+jtxt_pais.getText()+"/"+jtxt_contra.getText());
-            JSONObject obj = new JSONObject(res);
-            System.out.println(obj.get("user1"));
-        } catch (Exception ex) {
+            // TODO add your handling code here:
+            String res = post("http://127.0.0.1:5000/aeropuerto/crear", "{'id':'Test'}"); //"','nombre':'" + jtxt_nombre.getText() + "','pais':'" + jtxt_pais.getText() + "','contra':'" + jtxt_contra.getText() + 
+            System.out.println(res);
+        } catch (IOException ex) {
             Logger.getLogger(ControlVuelos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jbtn_enviarActionPerformed
