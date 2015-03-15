@@ -5,6 +5,7 @@
  */
 package sistemacontrolvuelos;
 
+import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -21,18 +22,20 @@ import java.util.logging.Logger;
 public class ControlVuelos extends javax.swing.JFrame {
     
     //MediaType para utilizar en el metod POST
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+//    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     OkHttpClient client = new OkHttpClient();
     //Metodo POST
-    String post(String url, String json) throws IOException {
-      RequestBody body = RequestBody.create(JSON, json);
+    String post(String url, RequestBody rbody) throws IOException {
+      
       Request request = new Request.Builder()
           .url(url)
-          .post(body)
+          .post(rbody)
           .build();
+     
       Response response = client.newCall(request).execute();
       return response.body().string();
     }
+    
     /**
      * Creates new form ControlVuelos
      */
@@ -196,7 +199,13 @@ public class ControlVuelos extends javax.swing.JFrame {
     private void jbtn_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_enviarActionPerformed
         try {
             // TODO add your handling code here:
-            String res = post("http://127.0.0.1:5000/aeropuerto/crear", "{'id':'Test'}"); //"','nombre':'" + jtxt_nombre.getText() + "','pais':'" + jtxt_pais.getText() + "','contra':'" + jtxt_contra.getText() + 
+            RequestBody formBody = new FormEncodingBuilder()
+                .add("id", jtxt_id.getText())
+                .add("nombre", jtxt_nombre.getText())
+                .add("pais", jtxt_pais.getText())
+                .add("contra", jtxt_contra.getText())
+                .build();
+            String res = post("http://127.0.0.1:5000/aeropuerto/crear", formBody);
             System.out.println(res);
         } catch (IOException ex) {
             Logger.getLogger(ControlVuelos.class.getName()).log(Level.SEVERE, null, ex);
