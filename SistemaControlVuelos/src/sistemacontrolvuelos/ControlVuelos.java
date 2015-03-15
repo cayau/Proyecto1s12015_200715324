@@ -14,6 +14,8 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -23,15 +25,21 @@ public class ControlVuelos extends javax.swing.JFrame {
     
     //MediaType para utilizar en el metod POST
 //    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    String servidorDir = "http://127.0.0.1:5000";
     OkHttpClient client = new OkHttpClient();
     //Metodo POST
     String post(String url, RequestBody rbody) throws IOException {
-      
       Request request = new Request.Builder()
           .url(url)
           .post(rbody)
           .build();
-     
+      Response response = client.newCall(request).execute();
+      return response.body().string();
+    }
+    String get(String url) throws IOException {
+      Request request = new Request.Builder()
+          .url(url)
+          .build();
       Response response = client.newCall(request).execute();
       return response.body().string();
     }
@@ -64,6 +72,7 @@ public class ControlVuelos extends javax.swing.JFrame {
         jbtn_enviar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -74,8 +83,7 @@ public class ControlVuelos extends javax.swing.JFrame {
 
         jLabel3.setText("Contraseña");
 
-        jtxt_id.setEditable(false);
-        jtxt_id.setText("A1");
+        jtxt_id.setText("1");
         jtxt_id.setName(""); // NOI18N
 
         jtxt_nombre.setText("Test");
@@ -122,7 +130,7 @@ public class ControlVuelos extends javax.swing.JFrame {
                                 .addComponent(jtxt_id))))
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(180, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -150,24 +158,37 @@ public class ControlVuelos extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Creacion de Aeropuertos", jPanel1);
 
+        jButton1.setText("Obtener Aeropuertos");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 301, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(306, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 272, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addContainerGap(238, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab2", jPanel2);
+        jTabbedPane1.addTab("Creacion de Vuelos", jPanel2);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 301, Short.MAX_VALUE)
+            .addGap(0, 451, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,12 +226,27 @@ public class ControlVuelos extends javax.swing.JFrame {
                 .add("pais", jtxt_pais.getText())
                 .add("contra", jtxt_contra.getText())
                 .build();
-            String res = post("http://127.0.0.1:5000/aeropuerto/crear", formBody);
+            
+            String res = post(servidorDir+"/aeropuerto/crear", formBody);
             System.out.println(res);
         } catch (IOException ex) {
             Logger.getLogger(ControlVuelos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jbtn_enviarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            // TODO add your handling code here:
+            String aeropuertos = get(servidorDir+"/aeropuertos");
+            JSONArray obj = new JSONArray(aeropuertos);
+            System.out.println( obj.get(0) );
+            JSONObject a = obj.getJSONObject(0);
+            System.out.println(a.get("id"));
+//            System.out.println(aeropuertos);
+        } catch (IOException ex) {
+            Logger.getLogger(ControlVuelos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -248,6 +284,7 @@ public class ControlVuelos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

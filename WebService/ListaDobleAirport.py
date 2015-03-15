@@ -1,3 +1,5 @@
+import json
+from flask import json
 class NodeAirport(object):
  
     def __init__(self, ide, nom, pai, con, prev, next):
@@ -41,18 +43,16 @@ class DoubleListAirport(object):
             current_node = current_node.next
  
     def show(self):
-        # print("Show list data:")
         current_node = self.head
-        VUELOS = ""
+        vuelos=[]
         while current_node is not None:
-            VUELOS += current_node.identificador+":{'nombre':"+current_node.nombre+", 'pais':"+current_node.pais+", 'contra':"+current_node.contrasena+"},"
+            vuelos.append({'id':current_node.identificador,'nombre':current_node.nombre,'pais':current_node.pais,'contra':current_node.contrasena})
             # print(current_node.prev.nombre if hasattr(current_node.prev, "nombre") else None)
             # print(current_node.nombre)
             # print(current_node.next.nombre if hasattr(current_node.next, "nombre") else None)
             current_node = current_node.next
-        VUELOS = {VUELOS}
-        return VUELOS
-        print("*"*50)
+        return vuelos
+        # print("*"*50)
 
     def dat(self, node_value):
         encontrado = "false"

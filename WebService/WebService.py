@@ -1,5 +1,5 @@
 import json
-from flask import Flask, request, abort, render_template, jsonify
+from flask import Flask, request, abort, render_template, json, jsonify
 from ListaDobleAirport import DoubleListAirport
 
 app = Flask(__name__)
@@ -56,8 +56,8 @@ def aeropuerto():
     nombre = request.form['nombre']
     pais = request.form['pais']
     contra = request.form['contra']
-    print(id +"-"+ nombre +"-"+ pais +"-"+ contra)
-    return id + nombre + pais + contra
+    aeroPuertos.append(id, nombre, pais, contra)
+    return "creado", 200
 #   Muestra la lista completa de aeropuertos
 @app.route('/aeropuertos', methods=['GET'])
 def aeropuertos():
