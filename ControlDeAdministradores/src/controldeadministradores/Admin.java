@@ -5,11 +5,59 @@
  */
 package controldeadministradores;
 
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDPixelMap;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 /**
  *
  * @author ayau1_000
  */
 public class Admin extends javax.swing.JFrame {
+    
+    String servidorDir = "http://127.0.0.1:5000";
+    OkHttpClient client = new OkHttpClient();
+    //Metodo POST
+    String post(String url, RequestBody rbody) throws IOException {
+      Request request = new Request.Builder()
+          .url(url)
+          .post(rbody)
+          .build();
+      Response response = client.newCall(request).execute();
+      return response.body().string();
+    }
+    //Funcion Get
+    String get(String url) throws IOException {
+      Request request = new Request.Builder()
+          .url(url)
+          .build();
+      Response response = client.newCall(request).execute();
+      return response.body().string();
+    }
 
     /**
      * Creates new form Admin
@@ -35,15 +83,18 @@ public class Admin extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
+        jcb_estado = new javax.swing.JComboBox();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jtbl_RepoteVuelos = new javax.swing.JTable();
+        jbtn_buscar = new javax.swing.JButton();
+        jbtn_vuelosPDF = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jtxt_aeropuerto = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jtbl_RepoteVuelosAeropuerto = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jComboBox3 = new javax.swing.JComboBox();
@@ -54,7 +105,6 @@ public class Admin extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Control de Administradores");
         setAlwaysOnTop(true);
-        setName("frame1"); // NOI18N
 
         jLabel1.setText("Seleccionar Vuelo: ");
         jLabel1.setMaximumSize(new java.awt.Dimension(120, 14));
@@ -83,7 +133,7 @@ public class Admin extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1044, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -107,20 +157,39 @@ public class Admin extends javax.swing.JFrame {
 
         jLabel2.setText("Estado del Vuelo:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcb_estado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "En Aeropuerto", "En Vuelo", "En Arribo", "Todos" }));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jtbl_RepoteVuelos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Id", "Vuelo", "Origen", "Destino", "Escalas"
+                "Id", "Origen", "Destino", "Fecha de Salida", "Facha de Llegada", "Precio Primera Clase", "Precio Clase Turista", "Precio Clase Ejecutiva", "Cantidad Primera Clase", "Cantidad Clase Turista", "Cantidad Clase Ejectiva", "Estado"
             }
-        ));
-        jScrollPane2.setViewportView(jTable2);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(jtbl_RepoteVuelos);
+
+        jbtn_buscar.setText("Buscar");
+        jbtn_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtn_buscarActionPerformed(evt);
+            }
+        });
+
+        jbtn_vuelosPDF.setText("Exportar PDF");
+        jbtn_vuelosPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtn_vuelosPDFActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -129,11 +198,15 @@ public class Admin extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1044, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jcb_estado, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbtn_buscar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbtn_vuelosPDF)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -143,32 +216,51 @@ public class Admin extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcb_estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbtn_buscar)
+                    .addComponent(jbtn_vuelosPDF))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Vuelos Totales", jPanel2);
+        jTabbedPane1.addTab("Reporte de Vuelos", jPanel2);
 
         jLabel3.setText("Ingresar el nombre del Aeropuerto");
 
-        jTextField1.setToolTipText("Ingrese el nombre de un aeropuerto para mostrar coincidencias");
-
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Id", "Nombre", "Origen", "Destino", "Estado"
-            }
-        ));
-        jScrollPane3.setViewportView(jTable3);
+        jtxt_aeropuerto.setToolTipText("Ingrese el nombre de un aeropuerto para mostrar coincidencias");
 
         jButton1.setText("Buscar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jtbl_RepoteVuelosAeropuerto.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Id", "Origen", "Destino", "Fecha de Salida", "Facha de Llegada", "Precio Primera Clase", "Precio Clase Turista", "Precio Clase Ejecutiva", "Cantidad Primera Clase", "Cantidad Clase Turista", "Cantidad Clase Ejectiva", "Estado"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane5.setViewportView(jtbl_RepoteVuelosAeropuerto);
+
+        jButton2.setText("Exportar a PDF");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -177,14 +269,16 @@ public class Admin extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jtxt_aeropuerto, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1044, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -193,10 +287,11 @@ public class Admin extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jtxt_aeropuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -226,7 +321,7 @@ public class Admin extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1044, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -252,7 +347,7 @@ public class Admin extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 639, Short.MAX_VALUE)
+            .addGap(0, 1064, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,6 +370,200 @@ public class Admin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jbtn_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_buscarActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jtbl_RepoteVuelos.getModel();
+        int rowCount = model.getRowCount();
+        //Remove rows one by one from the end of the table
+        for (int i = rowCount - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+        String res="";
+        try {
+            res = get(servidorDir+"/vuelos");
+            JSONArray obj = new JSONArray(res);
+
+            for (int i = 0; i < obj.length(); i++) {
+                JSONObject a = obj.getJSONObject(i);
+                String c = jcb_estado.getSelectedItem().toString();
+                String estado = a.get("state").toString();
+                if( estado.equals(c) || c.equals("Todos") ){
+                    model.addRow(new Object[]{a.get("id_fly"),
+                        a.get("origin"),
+                        a.get("destiny"),
+                        a.get("date_out"),
+                        a.get("date_in"),
+                        a.get("price_fc"),
+                        a.get("price_tc"),
+                        a.get("price_ec"),
+                        a.get("amount_fc"),
+                        a.get("amount_tc"),
+                        a.get("amount_ec"),
+                        a.get("state")
+                    });
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jbtn_buscarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jtbl_RepoteVuelosAeropuerto.getModel();
+        int rowCount = model.getRowCount();
+        //Remove rows one by one from the end of the table
+        for (int i = rowCount - 1; i >= 0; i--) {
+            model.removeRow(i);
+        }
+        String res="";
+        try {
+            res = get(servidorDir+"/vuelos");
+            JSONArray obj = new JSONArray(res);
+
+            for (int i = 0; i < obj.length(); i++) {
+                JSONObject a = obj.getJSONObject(i);
+                String aero = jtxt_aeropuerto.getText();
+                String estado = a.get("state").toString();
+                String origen = a.get("origin").toString();
+                String destino = a.get("destiny").toString();
+                if( (estado.equals("En Aeropuerto") && origen.equals(aero) ) || (estado.equals("En Arribo") && destino.equals(aero)) ){
+                    model.addRow(new Object[]{a.get("id_fly"),
+                        a.get("origin"),
+                        a.get("destiny"),
+                        a.get("date_out"),
+                        a.get("date_in"),
+                        a.get("price_fc"),
+                        a.get("price_tc"),
+                        a.get("price_ec"),
+                        a.get("amount_fc"),
+                        a.get("amount_tc"),
+                        a.get("amount_ec"),
+                        a.get("state")
+                    });
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jbtn_vuelosPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_vuelosPDFActionPerformed
+        try {
+            // TODO add your handling code here:
+            String body = "";
+            String res = get(servidorDir+"/vuelos");
+            JSONArray obj = new JSONArray(res);
+
+            for (int i = 0; i < obj.length(); i++) {
+                JSONObject a = obj.getJSONObject(i);
+                String c = jcb_estado.getSelectedItem().toString();
+                String estado = a.get("state").toString();
+                if( estado.equals(c) || c.equals("Todos") ){
+                    body= a.get("id_fly").toString()+"\t"+
+                        a.get("origin").toString()+"\t"+
+                        a.get("destiny").toString()+"\t"+
+                        a.get("date_out").toString()+"\t"+
+                        a.get("date_in").toString()+"\t"+
+                        a.get("price_fc").toString()+"\t"+
+                        a.get("price_tc").toString()+"\t"+
+                        a.get("price_ec").toString()+"\t"+
+                        a.get("amount_fc").toString()+"\t"+
+                        a.get("amount_tc").toString()+"\t"+
+                        a.get("amount_ec").toString()+"\t"+
+                        a.get("state").toString()+"-";
+                }
+            }
+            crearPDF("Vuelos por Nombre Aeropuerto", body);
+        } catch (Exception ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jbtn_vuelosPDFActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+         try {
+            // TODO add your handling code here:
+            String body = "";
+            String res = get(servidorDir+"/vuelos");
+            JSONArray obj = new JSONArray(res);
+
+            for (int i = 0; i < obj.length(); i++) {
+                JSONObject a = obj.getJSONObject(i);
+                String aero = jtxt_aeropuerto.getText();
+                String estado = a.get("state").toString();
+                String origen = a.get("origin").toString();
+                String destino = a.get("destiny").toString();
+                if( (estado.equals("En Aeropuerto") && origen.equals(aero) ) || (estado.equals("En Arribo") && destino.equals(aero)) ){
+                    body= a.get("id_fly").toString()+"\t"+
+                        a.get("origin").toString()+"\t"+
+                        a.get("destiny").toString()+"\t"+
+                        a.get("date_out").toString()+"\t"+
+                        a.get("date_in").toString()+"\t"+
+                        a.get("price_fc").toString()+"\t"+
+                        a.get("price_tc").toString()+"\t"+
+                        a.get("price_ec").toString()+"\t"+
+                        a.get("amount_fc").toString()+"\t"+
+                        a.get("amount_tc").toString()+"\t"+
+                        a.get("amount_ec").toString()+"\t"+
+                        a.get("state").toString()+"-";
+                }
+            }
+            crearPDF("Vuelos por Estado", body);
+        } catch (Exception ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    public void crearPDF(String file, String body) throws Exception {
+        String outputFileName = file+".pdf";
+//        if (args.length > 0)
+//            outputFileName = args[0];
+
+        // Create a document and add a page to it
+        PDDocument document = new PDDocument();
+        PDPage page1 = new PDPage(PDPage.PAGE_SIZE_A4);
+            // PDPage.PAGE_SIZE_LETTER is also possible
+        PDRectangle rect = page1.getMediaBox();
+            // rect can be used to get the page width and height
+        document.addPage(page1);
+
+        // Create a new font object selecting one of the PDF base fonts
+        PDFont fontPlain = PDType1Font.HELVETICA;
+        PDFont fontBold = PDType1Font.HELVETICA_BOLD;
+        PDFont fontItalic = PDType1Font.HELVETICA_OBLIQUE;
+        PDFont fontMono = PDType1Font.COURIER;
+
+        // Start a new content stream which will "hold" the to be created content
+        PDPageContentStream cos = new PDPageContentStream(document, page1);
+
+        int line = 0;
+
+        // Define a text content stream using the selected font, move the cursor and draw some text
+        cos.beginText();
+        cos.setFont(fontPlain, 14);
+        cos.moveTextPositionByAmount(100, rect.getHeight() - 50*(++line));
+        cos.drawString("Reporte de "+file);
+        cos.endText();
+        
+        String[] txtLine = body.split("-");
+        for(int k = 0 ; k < txtLine.length; k++){
+            cos.beginText();
+            cos.setFont(fontPlain, 12);
+            cos.moveTextPositionByAmount(100, rect.getHeight() - 50*(++line));
+            cos.drawString(txtLine[k]);
+            cos.endText();
+            cos.close();
+        }
+
+        // Make sure that the content stream is closed:
+        
+        // Save the results and ensure that the document is properly closed:
+        document.save(outputFileName);
+        document.close();
+    }
+
+    
     /**
      * @param args the command line arguments
      */
@@ -312,8 +601,8 @@ public class Admin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.JButton jButton1;
+    protected javax.swing.JButton jButton2;
     protected javax.swing.JComboBox jComboBox1;
-    protected javax.swing.JComboBox jComboBox2;
     protected javax.swing.JComboBox jComboBox3;
     protected javax.swing.JLabel jLabel1;
     protected javax.swing.JLabel jLabel2;
@@ -326,13 +615,16 @@ public class Admin extends javax.swing.JFrame {
     protected javax.swing.JPanel jPanel5;
     protected javax.swing.JScrollPane jScrollPane1;
     protected javax.swing.JScrollPane jScrollPane2;
-    protected javax.swing.JScrollPane jScrollPane3;
     protected javax.swing.JScrollPane jScrollPane4;
+    protected javax.swing.JScrollPane jScrollPane5;
     protected javax.swing.JTabbedPane jTabbedPane1;
     protected javax.swing.JTable jTable1;
-    protected javax.swing.JTable jTable2;
-    protected javax.swing.JTable jTable3;
     protected javax.swing.JTable jTable4;
-    protected javax.swing.JTextField jTextField1;
+    protected javax.swing.JButton jbtn_buscar;
+    protected javax.swing.JButton jbtn_vuelosPDF;
+    protected javax.swing.JComboBox jcb_estado;
+    protected javax.swing.JTable jtbl_RepoteVuelos;
+    protected javax.swing.JTable jtbl_RepoteVuelosAeropuerto;
+    protected javax.swing.JTextField jtxt_aeropuerto;
     // End of variables declaration//GEN-END:variables
 }

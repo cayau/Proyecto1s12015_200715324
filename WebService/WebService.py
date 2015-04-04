@@ -1,11 +1,14 @@
-import json
+import json, random
 from flask import Flask, request, abort, render_template, json, jsonify
 from ListaDobleAirport import DoubleListAirport
+from arbolAVLVuelos import AVLTree
 
 app = Flask(__name__)
 
 # lista doble Aeropuertos
 aeroPuertos = DoubleListAirport()
+# Arbol de Vuelos
+avlVuelos = AVLTree()
 
 USERS = {
     'user1': {'name': 'mike', 'email':'aaa@gmail.com'},
@@ -42,23 +45,75 @@ def usuario(user_id):
 #   Muestra la lista completa de vuelos
 @app.route('/vuelos', methods=['GET'])
 def vuelos():
-    return json.dumps(VUELOS)
-#   Muestra un vuelo por su id
-@app.route('/vuelo/<string:vuelo_id>', methods=['GET'])
-def vuelo(vuelo_id):
-    return json.dumps('VUELO: '+vuelo_id)
+    res=[]
+    avlVuelos.inorder(avlVuelos.rootNode, res)
+    return json.dumps(res)
 
-# Aeropuertos
-#   Crea un nuevo aeropuerto
+@app.route('/vuelo/id', methods=['POST'])
+def vuelosId():
+    id_fly = request.form['id_fly']
+    res = avlVuelos.searchItem(id_fly)
+    return json.dumps(res)
+
+#   Muestra un vuelo por su id
+@app.route('/vuelo/crear', methods=['POST'])
+def vuelo():
+    id_fly = request.form['id_fly']
+    origin = request.form['origin']
+    destiny = request.form['destiny']
+    date_out = request.form['date_out']
+    date_in = request.form['date_in']
+    price_fc = request.form['price_fc']
+    price_tc = request.form['price_tc']
+    price_ec = request.form['price_ec']
+    amount_fc = request.form['amount_fc']
+    amount_tc = request.form['amount_tc']
+    amount_ec = request.form['amount_ec']
+    state = request.form['state']
+    res = avlVuelos.insert(id_fly, origin, destiny, date_out, date_in, price_fc, price_tc, price_ec, amount_fc, amount_tc, amount_ec, state)
+    return json.dumps({'created':res}), 200
+
+# Actualiza la informacion de un vuelo
+@app.route('/vuelo/actualizar', methods=['POST'])
+def vueloActualizar():
+    id_fly = request.form['id_fly']
+    date_out = request.form['date_out']
+    date_in = request.form['date_in']
+    price_fc = request.form['price_fc']
+    price_tc = request.form['price_tc']
+    price_ec = request.form['price_ec']
+    amount_fc = request.form['amount_fc']
+    amount_tc = request.form['amount_tc']
+    amount_ec = request.form['amount_ec']
+    state = request.form['state']
+    res = avlVuelos.update(id_fly, date_out, date_in, price_fc, price_tc, price_ec, amount_fc, amount_tc, amount_ec, state)
+    return json.dumps({'updated':res}), 200
+
+# Eliminar la informacion de un vuelo
+@app.route('/vuelo/eliminar', methods=['POST'])
+def vueloEliminar():
+    id_fly = request.form['id_fly']
+    state = request.form['state']
+    print(state)
+    if state != 'En Vuelo':
+        avlVuelos.remove(id_fly)
+        res = True
+    else:
+        res = False
+    return json.dumps({'deleted':res}), 200
+
+# <--- Aeropuertos --->
+# Crea un nuevo aeropuerto
 @app.route('/aeropuerto/crear', methods=['POST'])
 def aeropuerto():
     id = request.form['id']
     nombre = request.form['nombre']
     pais = request.form['pais']
     contra = request.form['contra']
-    aeroPuertos.append(id, nombre, pais, contra)
-    return "creado", 200
-#   Muestra la lista completa de aeropuertos
+    res = aeroPuertos.append(id, nombre, pais, contra)
+    return json.dumps({'created':res}), 200
+
+# Muestra la lista completa de aeropuertos
 @app.route('/aeropuertos', methods=['GET'])
 def aeropuertos():
     res = aeroPuertos.show()

@@ -16,17 +16,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
+import javax.swing.JOptionPane;
 /**
  *
  * @author ayau1_000
  */
 public class ControlVuelos extends javax.swing.JFrame {
     
-    //MediaType para utilizar en el metod POST
-//    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     String servidorDir = "http://127.0.0.1:5000";
     OkHttpClient client = new OkHttpClient();
+    int c = 1;
     //Metodo POST
     String post(String url, RequestBody rbody) throws IOException {
       Request request = new Request.Builder()
@@ -36,6 +35,7 @@ public class ControlVuelos extends javax.swing.JFrame {
       Response response = client.newCall(request).execute();
       return response.body().string();
     }
+    //Funcion Get
     String get(String url) throws IOException {
       Request request = new Request.Builder()
           .url(url)
@@ -72,10 +72,74 @@ public class ControlVuelos extends javax.swing.JFrame {
         jbtn_enviar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jcb_origen_c = new javax.swing.JComboBox();
+        jcb_destino_c = new javax.swing.JComboBox();
+        jtxt_id_c = new javax.swing.JTextField();
+        jtxt_fecha_salida_c = new javax.swing.JTextField();
+        jtxt_fecha_llegada_c = new javax.swing.JTextField();
+        jtxt_precio_pc_c = new javax.swing.JTextField();
+        jtxt_precio_ct_c = new javax.swing.JTextField();
+        jtxt_precio_ce_c = new javax.swing.JTextField();
+        jtxt_cantidad_pc_c = new javax.swing.JTextField();
+        jtxt_cantidad_ct_c = new javax.swing.JTextField();
+        jtxt_cantidad_ce_c = new javax.swing.JTextField();
+        jcb_estado_c = new javax.swing.JComboBox();
+        jButton3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jcb_vuelos_e = new javax.swing.JComboBox();
+        jtxt_origen_e = new javax.swing.JTextField();
+        jtxt_destino_e = new javax.swing.JTextField();
+        jtxt_fecha_salida_e = new javax.swing.JTextField();
+        jtxt_fecha_llegada_e = new javax.swing.JTextField();
+        jtxt_precio_pc_e = new javax.swing.JTextField();
+        jtxt_precio_ct_e = new javax.swing.JTextField();
+        jtxt_precio_ce_e = new javax.swing.JTextField();
+        jtxt_cantidad_pc_e = new javax.swing.JTextField();
+        jtxt_cantidad_ct_e = new javax.swing.JTextField();
+        jtxt_cantidad_ce_e = new javax.swing.JTextField();
+        jtxt_estado_e = new javax.swing.JTextField();
+        jbtn_actualizar = new javax.swing.JButton();
+        jbtn_eliminar = new javax.swing.JButton();
+        jbtn_seleccionar = new javax.swing.JButton();
+        jbtn_enVuelo = new javax.swing.JButton();
+        jbtn_enArribo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(620, 320));
+        jTabbedPane1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTabbedPane1FocusGained(evt);
+            }
+        });
+
+        jPanel1.setOpaque(false);
 
         jLabel1.setText("Nombre");
 
@@ -87,16 +151,12 @@ public class ControlVuelos extends javax.swing.JFrame {
         jtxt_id.setName(""); // NOI18N
 
         jtxt_nombre.setText("Test");
-        jtxt_nombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtxt_nombreActionPerformed(evt);
-            }
-        });
 
         jtxt_pais.setText("Guatemala");
 
         jtxt_contra.setText("123456");
 
+        jbtn_enviar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jbtn_enviar.setText("Enviar");
         jbtn_enviar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,25 +173,27 @@ public class ControlVuelos extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jbtn_enviar)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addGap(43, 43, 43))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addGap(89, 89, 89)))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jtxt_nombre)
-                                .addComponent(jtxt_pais, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
-                                .addComponent(jtxt_contra)
-                                .addComponent(jtxt_id))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(43, 43, 43))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(89, 89, 89)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jtxt_pais)
+                            .addComponent(jtxt_contra)
+                            .addComponent(jtxt_id)
+                            .addComponent(jtxt_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel2)
-                    .addComponent(jLabel1))
-                .addContainerGap(180, Short.MAX_VALUE))
+                    .addComponent(jLabel1)
+                    .addComponent(jbtn_enviar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jtxt_contra, jtxt_id, jtxt_nombre, jtxt_pais});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -152,16 +214,50 @@ public class ControlVuelos extends javax.swing.JFrame {
                     .addComponent(jtxt_contra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
-                .addComponent(jbtn_enviar)
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addComponent(jbtn_enviar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Creacion de Aeropuertos", jPanel1);
 
-        jButton1.setText("Obtener Aeropuertos");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jLabel27.setText("Destino: ");
+
+        jLabel29.setText("Origen:");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Creacion de Vuelos");
+
+        jLabel6.setText("Id:");
+
+        jLabel7.setText("Hora y Fecha Salida:");
+
+        jLabel8.setText("Hora y Fecha Llegada:");
+
+        jLabel9.setText("Precio Primera Clase:");
+
+        jLabel10.setText("Precio Clase Turista:");
+
+        jLabel11.setText("Precio Clase Ejecutiva:");
+
+        jLabel12.setText("Cantidad Primera Clase:");
+
+        jLabel13.setText("Cantidad Clase Turista:");
+
+        jLabel14.setText("Cantidad Clase Ejecutiva:");
+
+        jLabel16.setText("Estado:");
+
+        jtxt_id_c.setEditable(false);
+        jtxt_id_c.setText("vuelo1");
+        jtxt_id_c.setEnabled(false);
+
+        jcb_estado_c.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "En Aeropuerto", "En Vuelo", "En Arribo" }));
+
+        jButton3.setText("Guardar Vuelo");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -169,85 +265,547 @@ public class ControlVuelos extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(306, Short.MAX_VALUE)
-                .addComponent(jButton1)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton3))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel16)
+                            .addComponent(jLabel27)
+                            .addComponent(jLabel29))
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jcb_origen_c, 0, 230, Short.MAX_VALUE)
+                            .addComponent(jtxt_cantidad_ce_c, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(jtxt_cantidad_ct_c, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(jtxt_cantidad_pc_c, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(jtxt_precio_ce_c, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(jtxt_precio_ct_c, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(jtxt_precio_pc_c, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(jtxt_fecha_llegada_c, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(jtxt_fecha_salida_c, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(jtxt_id_c, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addComponent(jcb_estado_c, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jcb_destino_c, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addContainerGap(238, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jcb_origen_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel29))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel27)
+                    .addComponent(jcb_destino_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jtxt_id_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jtxt_fecha_salida_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jtxt_fecha_llegada_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jtxt_precio_pc_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jtxt_precio_ct_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(jtxt_precio_ce_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(jtxt_cantidad_pc_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(jtxt_cantidad_ct_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(jtxt_cantidad_ce_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(jcb_estado_c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Creacion de Vuelos", jPanel2);
+
+        jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel15.setText("Seleccione un Vuelo");
+
+        jLabel30.setText("id:");
+
+        jLabel18.setText("Estado:");
+
+        jLabel17.setText("Destino:");
+
+        jLabel19.setText("Cantidad Clase Ejecutiva:");
+
+        jLabel20.setText("Cantidad Clase Turista:");
+
+        jLabel21.setText("Cantidad Primera Clase:");
+
+        jLabel22.setText("Precio Clase Ejecutiva:");
+
+        jLabel23.setText("Precio Clase Turista:");
+
+        jLabel24.setText("Precio Primera Clase:");
+
+        jLabel25.setText("Hora y Fecha Llegada:");
+
+        jLabel26.setText("Hora y Fecha Salida:");
+
+        jLabel28.setText("Origen:");
+
+        jtxt_origen_e.setEditable(false);
+        jtxt_origen_e.setEnabled(false);
+
+        jtxt_destino_e.setEditable(false);
+        jtxt_destino_e.setEnabled(false);
+
+        jtxt_estado_e.setEditable(false);
+        jtxt_estado_e.setEnabled(false);
+
+        jbtn_actualizar.setText("Actualizar Vuelo");
+        jbtn_actualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtn_actualizarActionPerformed(evt);
+            }
+        });
+
+        jbtn_eliminar.setText("Eliminar Vuelo");
+        jbtn_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtn_eliminarActionPerformed(evt);
+            }
+        });
+
+        jbtn_seleccionar.setText("Seleccionar");
+        jbtn_seleccionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtn_seleccionarActionPerformed(evt);
+            }
+        });
+
+        jbtn_enVuelo.setText("En Vuelo");
+        jbtn_enVuelo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtn_enVueloActionPerformed(evt);
+            }
+        });
+
+        jbtn_enArribo.setText("En Arribo");
+        jbtn_enArribo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtn_enArriboActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 451, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel26)
+                            .addComponent(jLabel25)
+                            .addComponent(jLabel24)
+                            .addComponent(jLabel23)
+                            .addComponent(jLabel22)
+                            .addComponent(jLabel21)
+                            .addComponent(jLabel20)
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel18)
+                            .addComponent(jLabel28)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jbtn_enVuelo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jbtn_enArribo)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jtxt_origen_e, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                                    .addComponent(jtxt_destino_e)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jbtn_actualizar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jbtn_eliminar))
+                                    .addComponent(jtxt_cantidad_ce_e, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                                    .addComponent(jtxt_cantidad_ct_e, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                                    .addComponent(jtxt_cantidad_pc_e, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                                    .addComponent(jtxt_precio_ce_e, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                                    .addComponent(jtxt_precio_ct_e, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                                    .addComponent(jtxt_precio_pc_e, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                                    .addComponent(jtxt_fecha_llegada_e, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                                    .addComponent(jtxt_fecha_salida_e, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                                    .addComponent(jtxt_estado_e))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel30)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jcb_vuelos_e, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbtn_seleccionar)))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 272, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jcb_vuelos_e, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel30)
+                    .addComponent(jbtn_seleccionar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel28)
+                    .addComponent(jtxt_origen_e, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel17)
+                    .addComponent(jtxt_destino_e, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel26)
+                    .addComponent(jtxt_fecha_salida_e, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel25)
+                    .addComponent(jtxt_fecha_llegada_e, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(jtxt_precio_pc_e, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel23)
+                    .addComponent(jtxt_precio_ct_e, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel22)
+                    .addComponent(jtxt_precio_ce_e, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel21)
+                    .addComponent(jtxt_cantidad_pc_e, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(jtxt_cantidad_ct_e, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(jtxt_cantidad_ce_e, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel18)
+                    .addComponent(jtxt_estado_e, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbtn_actualizar)
+                    .addComponent(jbtn_eliminar)
+                    .addComponent(jbtn_enVuelo)
+                    .addComponent(jbtn_enArribo))
+                .addContainerGap())
         );
 
-        jTabbedPane1.addTab("tab3", jPanel3);
+        jTabbedPane1.addTab("Editar Vuelo", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jtxt_nombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxt_nombreActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtxt_nombreActionPerformed
-
     private void jbtn_enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_enviarActionPerformed
-        try {
-            // TODO add your handling code here:
-            RequestBody formBody = new FormEncodingBuilder()
-                .add("id", jtxt_id.getText())
-                .add("nombre", jtxt_nombre.getText())
-                .add("pais", jtxt_pais.getText())
-                .add("contra", jtxt_contra.getText())
-                .build();
-            
-            String res = post(servidorDir+"/aeropuerto/crear", formBody);
-            System.out.println(res);
-        } catch (IOException ex) {
-            Logger.getLogger(ControlVuelos.class.getName()).log(Level.SEVERE, null, ex);
+        if(jtxt_contra.getText().length()>= 6){
+            try {
+                // TODO add your handling code here:
+                RequestBody formBody = new FormEncodingBuilder()
+                    .add("id", jtxt_id.getText())
+                    .add("nombre", jtxt_nombre.getText())
+                    .add("pais", jtxt_pais.getText())
+                    .add("contra", jtxt_contra.getText())
+                    .build();
+
+                String res = post(servidorDir+"/aeropuerto/crear", formBody);
+                String text;
+                JSONObject a = new JSONObject(res);
+                if(a.get("created").toString().equals("true")){
+                    text = "Aeropuerto creado con exito.";
+                }else{
+                    text = "Error!! Aeropuerto no creado, id seleccionado ya exite.";
+                }
+                JOptionPane.showMessageDialog(null,text);
+            } catch (IOException ex) {
+                Logger.getLogger(ControlVuelos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "La Contraseña debe tener almenos 6 caraceres!");
         }
     }//GEN-LAST:event_jbtn_enviarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
         try {
-            // TODO add your handling code here:
-            String aeropuertos = get(servidorDir+"/aeropuertos");
-            JSONArray obj = new JSONArray(aeropuertos);
-            System.out.println( obj.get(0) );
-            JSONObject a = obj.getJSONObject(0);
-            System.out.println(a.get("id"));
-//            System.out.println(aeropuertos);
+            RequestBody formBody = new FormEncodingBuilder()
+                .add("id_fly", jtxt_id_c.getText())
+                .add("origin", jcb_origen_c.getSelectedItem().toString())
+                .add("destiny", jcb_destino_c.getSelectedItem().toString())
+                .add("date_out", jtxt_fecha_salida_c.getText())
+                .add("date_in", jtxt_fecha_llegada_c.getText())
+                .add("price_fc", jtxt_precio_pc_c.getText())
+                .add("price_tc", jtxt_precio_ct_c.getText())
+                .add("price_ec", jtxt_precio_ce_c.getText())
+                .add("amount_fc", jtxt_cantidad_pc_c.getText())
+                .add("amount_tc", jtxt_cantidad_ct_c.getText())
+                .add("amount_ec", jtxt_cantidad_ce_c.getText())
+                .add("state", jcb_estado_c.getSelectedItem().toString())
+                .build();
+
+            String res = post(servidorDir+"/vuelo/crear", formBody);
+            String text;
+            JSONObject a = new JSONObject(res);
+            if(a.get("created").toString().equals("true")){
+                text = "Vuelo creado con exito.";
+                c++;
+                jtxt_id_c.setText("vuelo"+c);
+                jtxt_fecha_salida_c.setText("");
+                jtxt_fecha_llegada_c.setText("");
+                jtxt_precio_pc_c.setText("");
+                jtxt_precio_ct_c.setText("");
+                jtxt_precio_ce_c.setText("");
+                jtxt_cantidad_pc_c.setText("");
+                jtxt_cantidad_ct_c.setText("");
+                jtxt_cantidad_ce_c.setText("");
+            }else{
+                text = "Error!! Vuelo no creado, id seleccionado ya exite.";
+            }
+            JOptionPane.showMessageDialog(null,text);
         } catch (IOException ex) {
             Logger.getLogger(ControlVuelos.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jTabbedPane1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTabbedPane1FocusGained
+        // TODO add your handling code here:
+        actualizarCrear();
+        actualizarEditar();
+    }//GEN-LAST:event_jTabbedPane1FocusGained
+
+    private void actualizarCrear(){
+        try {
+            int itemCount = jcb_origen_c.getItemCount();
+            for(int i=0;i<itemCount;i++){
+                jcb_origen_c.removeItemAt(0);
+            }
+            itemCount = jcb_destino_c.getItemCount();
+            for(int i=0;i<itemCount;i++){
+                jcb_destino_c.removeItemAt(0);
+            }
+ 
+            String aeropuertos = get(servidorDir+"/aeropuertos");
+            JSONArray obj = new JSONArray(aeropuertos);
+            
+            for (int i = 0; i < obj.length(); i++) {
+                JSONObject a = obj.getJSONObject(i);
+                jcb_origen_c.addItem(a.get("nombre"));
+                jcb_destino_c.addItem(a.get("nombre"));
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ControlVuelos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    private void actualizarEditar(){
+        try {
+            int itemCount = jcb_vuelos_e.getItemCount();
+            for(int i=0;i<itemCount;i++){
+                jcb_vuelos_e.removeItemAt(0);
+            }
+            jtxt_origen_e.setText("");
+            jtxt_destino_e.setText("");
+            jtxt_fecha_salida_e.setText("");
+            jtxt_fecha_llegada_e.setText("");
+            jtxt_precio_pc_e.setText("");
+            jtxt_precio_ct_e.setText("");
+            jtxt_precio_ce_e.setText("");
+            jtxt_cantidad_pc_e.setText("");
+            jtxt_cantidad_ct_e.setText("");
+            jtxt_cantidad_ce_e.setText("");
+            jtxt_estado_e.setText("");
+            jbtn_enArribo.setEnabled(false);
+            jbtn_enVuelo.setEnabled(false);
+            jbtn_actualizar.setEnabled(false);
+ 
+            String vuelos = get(servidorDir+"/vuelos");
+            JSONArray obj = new JSONArray(vuelos);
+            
+            for (int i = 0; i < obj.length(); i++) {
+                JSONObject a = obj.getJSONObject(i);
+                jcb_vuelos_e.addItem(a.get("id_fly"));
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ControlVuelos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void jbtn_seleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_seleccionarActionPerformed
+        // TODO add your handling code here:
+        try {
+            if(jcb_vuelos_e.getSelectedItem() != null ){
+                RequestBody formBody = new FormEncodingBuilder()
+                    .add("id_fly", jcb_vuelos_e.getSelectedItem().toString())
+                    .build();
+
+                String res = post(servidorDir+"/vuelo/id", formBody);
+                JSONObject a = new JSONObject(res);
+                jtxt_origen_e.setText((String) a.get("origin"));
+                jtxt_destino_e.setText((String) a.get("destiny"));
+                jtxt_fecha_salida_e.setText((String) a.get("date_out"));
+                jtxt_fecha_llegada_e.setText((String) a.get("date_in"));
+                jtxt_precio_pc_e.setText((String) a.get("price_fc"));
+                jtxt_precio_ct_e.setText((String) a.get("price_tc"));
+                jtxt_precio_ce_e.setText((String) a.get("price_ec"));
+                jtxt_cantidad_pc_e.setText((String) a.get("amount_fc"));
+                jtxt_cantidad_ct_e.setText((String) a.get("amount_tc"));
+                jtxt_cantidad_ce_e.setText((String) a.get("amount_ec"));
+                jtxt_estado_e.setText((String) a.get("state"));
+                jbtn_enArribo.setEnabled(true);
+                jbtn_enVuelo.setEnabled(true);
+                jbtn_actualizar.setEnabled(true);
+            }else{
+                JOptionPane.showMessageDialog(null,"Seleccione un vuelo");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ControlVuelos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jbtn_seleccionarActionPerformed
+
+    private void jbtn_enVueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_enVueloActionPerformed
+        // TODO add your handling code here:
+        jtxt_estado_e.setText("En Vuelo");
+        actualizarVuelo();
+    }//GEN-LAST:event_jbtn_enVueloActionPerformed
+
+    private void jbtn_enArriboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_enArriboActionPerformed
+        // TODO add your handling code here:
+        jtxt_estado_e.setText("En Arribo");
+        actualizarVuelo();
+    }//GEN-LAST:event_jbtn_enArriboActionPerformed
+
+    private void jbtn_actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_actualizarActionPerformed
+        // TODO add your handling code here:
+        actualizarVuelo();
+    }//GEN-LAST:event_jbtn_actualizarActionPerformed
+
+    private void jbtn_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_eliminarActionPerformed
+        // TODO add your handling code here:
+        try {
+            RequestBody formBody = new FormEncodingBuilder()
+                .add("id_fly", jcb_vuelos_e.getSelectedItem().toString())
+                .add("state", jtxt_estado_e.getText())
+                .build();
+
+            String res = post(servidorDir+"/vuelo/eliminar", formBody);
+            String text = "";
+            JSONObject a = new JSONObject(res);
+            System.out.println(a.get("deleted"));
+            if(a.get("deleted").toString().equals("true")){
+                text = "Vuelo elimininado con exito.";
+                actualizarEditar();
+            }else{
+                text = "Vuelo no elimininado, actualmente volando.";
+            }
+            JOptionPane.showMessageDialog(null,text);
+        } catch (IOException ex) {
+            Logger.getLogger(ControlVuelos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jbtn_eliminarActionPerformed
+
+    private void actualizarVuelo()
+    {
+        try {
+            RequestBody formBody = new FormEncodingBuilder()
+                .add("id_fly", jcb_vuelos_e.getSelectedItem().toString())
+                .add("date_out", jtxt_fecha_salida_e.getText())
+                .add("date_in", jtxt_fecha_llegada_e.getText())
+                .add("price_fc", jtxt_precio_pc_e.getText())
+                .add("price_tc", jtxt_precio_ct_e.getText())
+                .add("price_ec", jtxt_precio_ce_e.getText())
+                .add("amount_fc", jtxt_cantidad_pc_e.getText())
+                .add("amount_tc", jtxt_cantidad_ct_e.getText())
+                .add("amount_ec", jtxt_cantidad_ce_e.getText())
+                .add("state", jtxt_estado_e.getText())
+                .build();
+
+            String res = post(servidorDir+"/vuelo/actualizar", formBody);
+            String text = "";
+            JSONObject a = new JSONObject(res);
+            if(a.get("updated").toString().equals("true")){
+                text = "Vuelo actualizado con exito.";
+            }
+            JOptionPane.showMessageDialog(null,text);
+        } catch (IOException ex) {
+            Logger.getLogger(ControlVuelos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -284,19 +842,74 @@ public class ControlVuelos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JButton jbtn_actualizar;
+    private javax.swing.JButton jbtn_eliminar;
+    private javax.swing.JButton jbtn_enArribo;
+    private javax.swing.JButton jbtn_enVuelo;
     private javax.swing.JButton jbtn_enviar;
+    private javax.swing.JButton jbtn_seleccionar;
+    private javax.swing.JComboBox jcb_destino_c;
+    private javax.swing.JComboBox jcb_estado_c;
+    private javax.swing.JComboBox jcb_origen_c;
+    private javax.swing.JComboBox jcb_vuelos_e;
+    private javax.swing.JTextField jtxt_cantidad_ce_c;
+    private javax.swing.JTextField jtxt_cantidad_ce_e;
+    private javax.swing.JTextField jtxt_cantidad_ct_c;
+    private javax.swing.JTextField jtxt_cantidad_ct_e;
+    private javax.swing.JTextField jtxt_cantidad_pc_c;
+    private javax.swing.JTextField jtxt_cantidad_pc_e;
     private javax.swing.JTextField jtxt_contra;
+    private javax.swing.JTextField jtxt_destino_e;
+    private javax.swing.JTextField jtxt_estado_e;
+    private javax.swing.JTextField jtxt_fecha_llegada_c;
+    private javax.swing.JTextField jtxt_fecha_llegada_e;
+    private javax.swing.JTextField jtxt_fecha_salida_c;
+    private javax.swing.JTextField jtxt_fecha_salida_e;
     private javax.swing.JTextField jtxt_id;
+    private javax.swing.JTextField jtxt_id_c;
     private javax.swing.JTextField jtxt_nombre;
+    private javax.swing.JTextField jtxt_origen_e;
     private javax.swing.JTextField jtxt_pais;
+    private javax.swing.JTextField jtxt_precio_ce_c;
+    private javax.swing.JTextField jtxt_precio_ce_e;
+    private javax.swing.JTextField jtxt_precio_ct_c;
+    private javax.swing.JTextField jtxt_precio_ct_e;
+    private javax.swing.JTextField jtxt_precio_pc_c;
+    private javax.swing.JTextField jtxt_precio_pc_e;
     // End of variables declaration//GEN-END:variables
 }
